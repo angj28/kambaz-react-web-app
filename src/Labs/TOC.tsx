@@ -21,7 +21,7 @@ export default function TOC() {
           <Link to="/Kambaz">Kambaz</Link>
         </li>
         <li>
-            Assignment 1 Source Code
+            <a href="https://github.com/angj28/kambaz-react-web-app/tree/a1">Assignment 1 Source Code</a>
         </li>
       </ul>
     </div>

@@ -1,6 +1,6 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
-import { BiChevronDown } from "react-icons/bi";
-BiChevronDown
+import "../../styles.css";
+
 export default function AssignmentEditor() {
   return (
     <div id="wd-assignments-editor">
@@ -29,7 +29,7 @@ export default function AssignmentEditor() {
         {/* Points */}
         <Form.Group as={Row} id="wd-points">
           <Form.Label column sm={3}>
-            Points
+            <b> Points</b>
           </Form.Label>
           <Col sm={9}>
             <Form.Control className="mb-4" type="number" value={100} />
@@ -39,12 +39,11 @@ export default function AssignmentEditor() {
         {/* Assignment Group */}
         <Form.Group as={Row} id="wd-group">
           <Form.Label column sm={3}>
-            Assignment Group
+            <b>Assignment Group</b>
           </Form.Label>
           <Col sm={9}>
             <Form.Control as="select">
               <option value="ASSIGNMENTS">ASSIGNMENTS</option>
-              
             </Form.Control>
           </Col>
         </Form.Group>
@@ -52,7 +51,7 @@ export default function AssignmentEditor() {
         {/* Display Grade As */}
         <Form.Group as={Row} id="wd-display-grade-as">
           <Form.Label column sm={3}>
-            Display Grade as
+            <b>Display Grade as</b>
           </Form.Label>
           <Col sm={9}>
             <Form.Control as="select">
@@ -64,7 +63,7 @@ export default function AssignmentEditor() {
         {/* Submission Type */}
         <Form.Group as={Row} id="wd-submission-type">
           <Form.Label column sm={3}>
-            Submission Type
+            <b>Submission Type</b>
           </Form.Label>
           <Col sm={9}>
             <Form.Control as="select">
@@ -103,7 +102,12 @@ export default function AssignmentEditor() {
             <b>Assign to</b>
           </Form.Label>
           <Col sm={9}>
-            <Form.Control className="mb-2" type="text" value="Everyone" />
+            <div className="fake-multiselect">
+              <Button variant="secondary" className="multiselect-tag">
+                Everyone X
+              </Button>
+            </div>
+
             <b>Due</b>
             <Form.Control className="mb-2" type="date" value="2024-05-13" />
 
@@ -134,7 +138,7 @@ export default function AssignmentEditor() {
 
         <hr />
 
-        {/* Action Buttons */}
+        {/* cancel / save */}
         <Form.Group>
           <Row>
             <Col className="text-end">

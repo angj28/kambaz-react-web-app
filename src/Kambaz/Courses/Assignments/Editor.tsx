@@ -1,7 +1,14 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import "../../styles.css";
+import { Link, useParams } from "react-router-dom";
+import * as db from "../../Database/Index";
 
 export default function AssignmentEditor() {
+  const { aid, cid } = useParams();
+  const assignment = db.assignments.find(
+    (assignment) => assignment._id === aid
+  );
+
   return (
     <div id="wd-assignments-editor">
       <Form>
@@ -10,7 +17,11 @@ export default function AssignmentEditor() {
           <Form.Label>
             <b>Assignment Name</b>
           </Form.Label>
-          <Form.Control className="mb-2" type="text" value="A1 - ENV + HTML" />
+          <Form.Control
+            className="mb-2"
+            type="text"
+            value={assignment ? assignment.title : ""}
+          />
         </Form.Group>
 
         {/* Assignment Description */}
@@ -22,7 +33,7 @@ export default function AssignmentEditor() {
             className="mb-3"
             as="textarea"
             rows={3}
-            value="The assignment is available online Submit a link to the landing page of"
+            value={assignment ? assignment.description : ""}
           />
         </Form.Group>
 
@@ -32,7 +43,11 @@ export default function AssignmentEditor() {
             <b> Points</b>
           </Form.Label>
           <Col sm={9}>
-            <Form.Control className="mb-4" type="number" value={100} />
+            <Form.Control
+              className="mb-4"
+              type="number"
+              value={assignment ? assignment.points : 0}
+            />
           </Col>
         </Form.Group>
 
@@ -109,7 +124,11 @@ export default function AssignmentEditor() {
             </div>
 
             <b>Due</b>
-            <Form.Control className="mb-2" type="date" value="2024-05-13" />
+            <Form.Control
+              className="mb-2"
+              type="date"
+              value={assignment ? assignment.dueDate : ""}
+            />
 
             <Row>
               <Col sm={6}>
@@ -118,7 +137,7 @@ export default function AssignmentEditor() {
                 </Form.Label>
                 <Form.Control
                   type="date"
-                  value="2024-05-06"
+                  value={assignment ? assignment.availableDate : ""}
                   id="wd-available-from"
                 />
               </Col>
@@ -128,7 +147,7 @@ export default function AssignmentEditor() {
                 </Form.Label>
                 <Form.Control
                   type="date"
-                  value="2024-05-20"
+                  value={assignment ? assignment.dueDate : ""}
                   id="wd-available-until"
                 />
               </Col>
@@ -142,10 +161,14 @@ export default function AssignmentEditor() {
         <Form.Group>
           <Row>
             <Col className="text-end">
-              <Button variant="secondary" className="me-2">
-                Cancel
-              </Button>
-              <Button variant="danger">Save</Button>
+              <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+                <Button variant="secondary" className="me-2">
+                  Cancel
+                </Button>
+              </Link>
+              <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+                <Button variant="danger">Save</Button>
+              </Link>
             </Col>
           </Row>
         </Form.Group>

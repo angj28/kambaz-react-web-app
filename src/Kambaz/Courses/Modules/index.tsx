@@ -24,7 +24,7 @@ export default function Modules() {
           setModuleName("");
         }}
       />
-      <br /> <br /> <br />
+      <br />
       <ListGroup className="rounded-0" id="wd-modules">
         {modules
           .filter((module: any) => module.course === cid)

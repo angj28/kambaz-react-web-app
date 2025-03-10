@@ -5,15 +5,31 @@ import {
   BsPlus,
   BsJournals,
 } from "react-icons/bs";
+import { FaTrash } from "react-icons/fa";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 import AssignmentControls from "./AssignmentControls";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAssignment } from "./reducer";
+import { useState } from "react";
+import DeleteAssignmentModal from "./DeleteAssignmentModal";
 
 export default function Assignments() {
   const { cid } = useParams();
+  const dispatch = useDispatch();
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState<
+    string | null
+  >(null);
+
+  const handleShow = (assignmentId: string) => {
+    setSelectedAssignmentId(assignmentId);
+  };
+
+  const handleClose = () => {
+    setSelectedAssignmentId(null);
+  };
   const formatDateForDisplay = (dateString: string) => {
     const date = new Date(dateString);
 
@@ -32,6 +48,11 @@ export default function Assignments() {
     const formattedDate = date.toLocaleString("en-US", options);
 
     return formattedDate.replace(/^(\w+ \d+)(.*)$/, "$1 $2");
+  };
+
+  const deleteThisAssignment = (assignmentId: string) => {
+    dispatch(deleteAssignment(assignmentId));
+    handleClose();
   };
 
   return (
@@ -68,7 +89,17 @@ export default function Assignments() {
                     <b>Due</b> {formatDateForDisplay(assignment.dueDate)} |{" "}
                     {assignment.points} pts
                   </div>
+                  <FaTrash
+                    className="text-danger me-2 mb-1"
+                    onClick={() => handleShow(assignment._id)}
+                  />
                   <LessonControlButtons />
+                  <DeleteAssignmentModal
+                    show={selectedAssignmentId === assignment._id}
+                    handleClose={handleClose}
+                    assignmentId={assignment._id}
+                    deleteThisAssignment={deleteThisAssignment}
+                  />
                 </ListGroup.Item>
               ))}
           </ListGroup>

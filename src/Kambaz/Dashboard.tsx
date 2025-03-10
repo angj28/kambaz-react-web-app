@@ -133,6 +133,15 @@ export default function Dashboard({
                     {course.description}{" "}
                   </Card.Text>
                   <ProtectedFaculty studentAccess={<></>}>
+                    <Button
+                      onClick={() =>
+                        navigate(`/Kambaz/Courses/${course._id}/Home`)
+                      }
+                      variant="primary"
+                    >
+                      {" "}
+                      Go{" "}
+                    </Button>
                     <button
                       onClick={(event) => {
                         event.preventDefault();

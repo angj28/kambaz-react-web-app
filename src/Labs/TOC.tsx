@@ -56,6 +56,14 @@ export default function TOC() {
           Assignment 3 Github
         </Nav.Link>
       </Nav.Item>
+      <Nav.Item>
+        <Nav.Link
+          id="wd-github"
+          href="https://github.com/angj28/kambaz-react-web-app/tree/a4"
+        >
+          Assignment 4 Github
+        </Nav.Link>
+      </Nav.Item>
     </Nav>
   );
 }

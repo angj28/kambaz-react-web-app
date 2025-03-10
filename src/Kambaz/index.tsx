@@ -6,13 +6,21 @@ import Courses from "./Courses";
 import "./styles.css";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import * as db from "./Database/Index";
 import ProtectedRoute from "./Account/ProtectedRoute";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addCourse,
+  addEnrollment,
+  deleteCourse,
+  updateCourse,
+} from "./Courses/reducer";
 
 export default function Kambaz() {
-  const [courses, setCourses] = useState<any[]>(db.courses);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const dispatch = useDispatch();
+  const { courses } = useSelector((state: any) => state.coursesReducer);
   const [course, setCourse] = useState<any>({
-    _id: "0",
+    _id: uuidv4(),
     name: "New Course",
     number: "New Number",
     startDate: "2023-09-10",
@@ -22,21 +30,30 @@ export default function Kambaz() {
   });
   const addNewCourse = () => {
     const newCourse = { ...course, _id: uuidv4() };
-    setCourses((prevCourses) => [...prevCourses, newCourse]);
+    dispatch(addCourse(newCourse));
+
+    const newEnrollment = {
+      _id: uuidv4(),
+      user: currentUser._id,
+      course: newCourse._id,
+    };
+    dispatch(addEnrollment(newEnrollment));
+
+    setCourse({
+      _id: uuidv4(),
+      name: "New Course",
+      number: "New Number",
+      startDate: "2023-09-10",
+      endDate: "2023-12-15",
+      image: "/images/cat1.jpg",
+      description: "New Description",
+    });
   };
-  const deleteCourse = (courseId: string) => {
-    setCourses(courses.filter((course) => course._id !== courseId));
+  const deleteThisCourse = (courseId: string) => {
+    dispatch(deleteCourse(courseId));
   };
-  const updateCourse = () => {
-    setCourses(
-      courses.map((c) => {
-        if (c._id === course._id) {
-          return course;
-        } else {
-          return c;
-        }
-      })
-    );
+  const updateThisCourse = () => {
+    dispatch(updateCourse(course));
   };
   return (
     <div id="wd-kambaz">
@@ -54,8 +71,8 @@ export default function Kambaz() {
                   course={course}
                   setCourse={setCourse}
                   addNewCourse={addNewCourse}
-                  deleteCourse={deleteCourse}
-                  updateCourse={updateCourse}
+                  deleteCourse={deleteThisCourse}
+                  updateCourse={updateThisCourse}
                 />
               </ProtectedRoute>
             }

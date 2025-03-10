@@ -1,13 +1,51 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import "../../styles.css";
-import { Link, useParams } from "react-router-dom";
-import * as db from "../../Database/Index";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addAssignment, updateAssignment } from "./reducer";
+import { v4 as uuidv4 } from "uuid";
 
 export default function AssignmentEditor() {
+  const navigate = useNavigate();
   const { aid, cid } = useParams();
-  const assignment = db.assignments.find(
-    (assignment) => assignment._id === aid
+  const assignments = useSelector(
+    (state: any) => state.assignmentsReducer.assignments
   );
+  const dispatch = useDispatch();
+  const assignment = assignments.find(
+    (assignment: any) => assignment._id === aid
+  );
+  const [title, setTitle] = useState(assignment ? assignment.title : "");
+  const [description, setDescription] = useState(
+    assignment ? assignment.description : ""
+  );
+  const [points, setPoints] = useState(assignment ? assignment.points : "");
+  const [dueDate, setDueDate] = useState(assignment ? assignment.dueDate : "");
+  const [availableFrom, setAvailableFrom] = useState(
+    assignment ? assignment.availableDate : ""
+  );
+  const addNewAssignment = () => {
+    console.log(assignment);
+    const newAssignment = {
+      _id: aid ? aid : uuidv4(),
+      title,
+      description,
+      points,
+      dueDate,
+      availableDate: availableFrom,
+      course: cid,
+      modules: [],
+    };
+    console.log(newAssignment);
+
+    if (assignment) {
+      dispatch(updateAssignment(newAssignment));
+    } else {
+      dispatch(addAssignment(newAssignment));
+    }
+    navigate(`/Kambaz/Courses/${cid}/Assignments/`);
+  };
 
   return (
     <div id="wd-assignments-editor">
@@ -20,7 +58,8 @@ export default function AssignmentEditor() {
           <Form.Control
             className="mb-2"
             type="text"
-            value={assignment ? assignment.title : ""}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </Form.Group>
 
@@ -33,7 +72,8 @@ export default function AssignmentEditor() {
             className="mb-3"
             as="textarea"
             rows={3}
-            value={assignment ? assignment.description : ""}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </Form.Group>
 
@@ -46,7 +86,8 @@ export default function AssignmentEditor() {
             <Form.Control
               className="mb-4"
               type="number"
-              value={assignment ? assignment.points : 0}
+              value={points}
+              onChange={(e) => setPoints(e.target.value)}
             />
           </Col>
         </Form.Group>
@@ -127,7 +168,8 @@ export default function AssignmentEditor() {
             <Form.Control
               className="mb-2"
               type="date"
-              value={assignment ? assignment.dueDate : ""}
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
             />
 
             <Row>
@@ -137,7 +179,8 @@ export default function AssignmentEditor() {
                 </Form.Label>
                 <Form.Control
                   type="date"
-                  value={assignment ? assignment.availableDate : ""}
+                  value={availableFrom}
+                  onChange={(e) => setAvailableFrom(e.target.value)}
                   id="wd-available-from"
                 />
               </Col>
@@ -147,7 +190,8 @@ export default function AssignmentEditor() {
                 </Form.Label>
                 <Form.Control
                   type="date"
-                  value={assignment ? assignment.dueDate : ""}
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
                   id="wd-available-until"
                 />
               </Col>
@@ -166,9 +210,9 @@ export default function AssignmentEditor() {
                   Cancel
                 </Button>
               </Link>
-              <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
-                <Button variant="danger">Save</Button>
-              </Link>
+              <Button variant="danger" onClick={addNewAssignment}>
+                Save
+              </Button>
             </Col>
           </Row>
         </Form.Group>

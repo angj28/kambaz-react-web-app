@@ -9,30 +9,30 @@ import LessonControlButtons from "../Modules/LessonControlButtons";
 import AssignmentControls from "./AssignmentControls";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { useParams } from "react-router";
-import * as db from "../../Database/Index";
+import { useSelector } from "react-redux";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments;
-const formatDateForDisplay = (dateString: string) => {
-  const date = new Date(dateString);
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const formatDateForDisplay = (dateString: string) => {
+    const date = new Date(dateString);
 
-  if (isNaN(date.getTime())) {
-    return '';
-  }
+    if (isNaN(date.getTime())) {
+      return "";
+    }
 
-  const options: Intl.DateTimeFormatOptions = {
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true
+    const options: Intl.DateTimeFormatOptions = {
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+
+    const formattedDate = date.toLocaleString("en-US", options);
+
+    return formattedDate.replace(/^(\w+ \d+)(.*)$/, "$1 $2");
   };
-
-  const formattedDate = date.toLocaleString('en-US', options);
-
-  return formattedDate.replace(/^(\w+ \d+)(.*)$/, '$1 $2');
-};
 
   return (
     <div id="wd-assignments">
@@ -64,8 +64,9 @@ const formatDateForDisplay = (dateString: string) => {
                     </a>
                     <br />
                     {assignment.modules} | <b>Not available until</b>{" "}
-                    {formatDateForDisplay(assignment.availableDate)} | <b>Due</b> {formatDateForDisplay(assignment.dueDate)}{" "}
-                    | {assignment.points} pts
+                    {formatDateForDisplay(assignment.availableDate)} |{" "}
+                    <b>Due</b> {formatDateForDisplay(assignment.dueDate)} |{" "}
+                    {assignment.points} pts
                   </div>
                   <LessonControlButtons />
                 </ListGroup.Item>

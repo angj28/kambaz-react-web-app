@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteAssignment } from "./reducer";
 import { useState } from "react";
 import DeleteAssignmentModal from "./DeleteAssignmentModal";
+import ProtectedFaculty from "../../ProtectedFaculty";
 
 export default function Assignments() {
   const { cid } = useParams();
@@ -89,17 +90,19 @@ export default function Assignments() {
                     <b>Due</b> {formatDateForDisplay(assignment.dueDate)} |{" "}
                     {assignment.points} pts
                   </div>
-                  <FaTrash
-                    className="text-danger me-2 mb-1"
-                    onClick={() => handleShow(assignment._id)}
-                  />
-                  <LessonControlButtons />
-                  <DeleteAssignmentModal
-                    show={selectedAssignmentId === assignment._id}
-                    handleClose={handleClose}
-                    assignmentId={assignment._id}
-                    deleteThisAssignment={deleteThisAssignment}
-                  />
+                  <ProtectedFaculty studentAccess={<></>}>
+                    <FaTrash
+                      className="text-danger me-2 mb-1"
+                      onClick={() => handleShow(assignment._id)}
+                    />
+                    <LessonControlButtons />
+                    <DeleteAssignmentModal
+                      show={selectedAssignmentId === assignment._id}
+                      handleClose={handleClose}
+                      assignmentId={assignment._id}
+                      deleteThisAssignment={deleteThisAssignment}
+                    />
+                  </ProtectedFaculty>
                 </ListGroup.Item>
               ))}
           </ListGroup>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import * as client from "./Client.ts";
+import * as client from "./client.ts";
 import { FormControl } from "react-bootstrap";
 export default function WorkingWithObjectsAsynchronously() {
   const [assignment, setAssignment] = useState<any>({});

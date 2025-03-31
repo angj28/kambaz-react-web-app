@@ -34,7 +34,6 @@ export default function Dashboard({
       console.log("Fetched Courses:", allCourses);
       console.log("Courses:", courses);
       setAllCourses(allCourses);
-      courses = await userClient.findMyCourses();
     } catch (error) {
       console.error("Error fetching courses:", error);
     }

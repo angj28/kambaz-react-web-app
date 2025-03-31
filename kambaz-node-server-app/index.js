@@ -30,7 +30,7 @@ const sessionOptions = {
 
 if (process.env.NODE_ENV === "production") {
   sessionOptions.proxy = true;
-  sessionOptions.cookie.sameSite = "none";
+  sessionOptions.cookie.sameSite = "strict";
   sessionOptions.cookie.secure = true;
   if (process.env.NODE_SERVER_DOMAIN) {
     sessionOptions.cookie.domain = process.env.NODE_SERVER_DOMAIN;

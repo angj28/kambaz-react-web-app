@@ -74,7 +74,23 @@ export default function TOC() {
           id="wd-github"
           href="https://github.com/angj28/kambaz-react-web-app/tree/a5"
         >
-          Assignment 5 Github
+          Assignment 5 React Github
+        </Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link
+          id="wd-github"
+          href="https://github.com/angj28/kambaz-node-server-app/tree/a5"
+        >
+          Assignment 5 Node Github
+        </Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link
+          id="wd-github"
+          href="https://kambaz-node-server-app-angj28.onrender.com"
+        >
+          Assignment 5 Server
         </Nav.Link>
       </Nav.Item>
     </Nav>

@@ -1,10 +1,10 @@
 import { Button, Card, Col, FormControl, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ProtectedFaculty from "./ProtectedFaculty";
 import { useEffect, useState } from "react";
 import ProtectedStudent from "./ProtectedStudent";
-import { deleteEnrollment, setEnrollments } from "./Courses/reducer";
+import { setEnrollments } from "./Courses/reducer";
 import * as coursesClient from "./Courses/client";
 import * as userClient from "./Account/client";
 

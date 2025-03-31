@@ -27,27 +27,6 @@ export default function AssignmentEditor() {
   const [availableFrom, setAvailableFrom] = useState(
     assignment ? assignment.availableDate : ""
   );
-  const addNewAssignment = () => {
-    console.log(assignment);
-    const newAssignment = {
-      _id: aid ? aid : uuidv4(),
-      title,
-      description,
-      points,
-      dueDate,
-      availableDate: availableFrom,
-      course: cid,
-      modules: [],
-    };
-    console.log(newAssignment);
-
-    if (assignment) {
-      dispatch(updateAssignment(newAssignment));
-    } else {
-      dispatch(addAssignment(newAssignment));
-    }
-    navigate(`/Kambaz/Courses/${cid}/Assignments/`);
-  };
 
   const createNewAssignmentForCourse = async () => {
     if (!cid) return;

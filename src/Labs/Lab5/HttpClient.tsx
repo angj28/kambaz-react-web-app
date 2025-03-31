@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import * as client from "./Client";
+import * as client from "./Client.ts";
 export default function HttpClient() {
   const [welcomeOnClick, setWelcomeOnClick] = useState("");
   const [welcomeOnLoad, setWelcomeOnLoad] = useState("");

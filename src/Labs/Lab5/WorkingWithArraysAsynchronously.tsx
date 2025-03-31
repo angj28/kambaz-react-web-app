@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import * as client from "./Client";
+import * as client from "./Client.ts";
 import { FormControl, ListGroup } from "react-bootstrap";
 import { FaPlusCircle, FaTrash } from "react-icons/fa";
 import { TiDelete } from "react-icons/ti";

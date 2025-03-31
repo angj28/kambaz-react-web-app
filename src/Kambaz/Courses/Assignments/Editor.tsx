@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
 import { v4 as uuidv4 } from "uuid";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
   const navigate = useNavigate();
@@ -45,6 +47,34 @@ export default function AssignmentEditor() {
       dispatch(addAssignment(newAssignment));
     }
     navigate(`/Kambaz/Courses/${cid}/Assignments/`);
+  };
+
+  const createNewAssignmentForCourse = async () => {
+    if (!cid) return;
+    const newAssignment = {
+      _id: aid ? aid : uuidv4(),
+      title,
+      description,
+      points,
+      dueDate,
+      availableDate: availableFrom,
+      course: cid,
+      modules: [],
+    };
+    if (aid && assignment) {
+      saveAssignment(newAssignment);
+    } else {
+      const assignment = await coursesClient.createAssignmentForCourse(
+        cid,
+        newAssignment
+      );
+      dispatch(addAssignment(assignment));
+    }
+    navigate(`/Kambaz/Courses/${cid}/Assignments/`);
+  };
+  const saveAssignment = async (assignment: any) => {
+    await assignmentsClient.updateAssignment(assignment);
+    dispatch(updateAssignment(assignment));
   };
 
   return (
@@ -210,7 +240,7 @@ export default function AssignmentEditor() {
                   Cancel
                 </Button>
               </Link>
-              <Button variant="danger" onClick={addNewAssignment}>
+              <Button variant="danger" onClick={createNewAssignmentForCourse}>
                 Save
               </Button>
             </Col>

@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { FormControl } from "react-bootstrap";
-import { useNavigate } from "react-router";
 
 const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 export default function WorkingWithObjects() {
-  const navigate = useNavigate();
   const [assignment, setAssignment] = useState({
     id: 1,
     title: "NodeJS Assignment",
@@ -73,7 +71,6 @@ export default function WorkingWithObjects() {
         onChange={(e) => {
           const updatedCompleted = e.target.checked;
           setAssignment({ ...assignment, completed: updatedCompleted });
-          navigate(`${ASSIGNMENT_API_URL}/completed/${assignment.completed}`);
         }}
       />
       <hr />

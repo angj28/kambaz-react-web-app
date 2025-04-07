@@ -89,12 +89,14 @@ export default function Assignments() {
                 <BsGripVertical className="me-2 fs-3" />
                 <BsJournals className="me-3 fs-4 text-success" />
                 <div className="flex-grow-1 me-3">
-                  <a
-                    href={`#/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}
-                    className="wd-assignment-link"
-                  >
-                    {assignment.title}
-                  </a>
+                  <ProtectedFaculty studentAccess={<b>{assignment.title}</b>}>
+                    <a
+                      href={`#/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}
+                      className="wd-assignment-link"
+                    >
+                      {assignment.title}
+                    </a>
+                  </ProtectedFaculty>
                   <br />
                   {assignment.modules} | <b>Not available until</b>{" "}
                   {formatDateForDisplay(assignment.availableDate)} | <b>Due</b>{" "}

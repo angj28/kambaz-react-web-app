@@ -1,45 +1,15 @@
 import { Button, Table, Form } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
-import { useParams } from "react-router-dom";
-import * as coursesClient from "../client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProtectedFaculty from "../../ProtectedFaculty";
-export default function PeopleTable() {
-  const { cid } = useParams();
-  const [enrollments, setEnrollments] = useState<any[]>([]);
+import PeopleDetails from "./details";
+import { Link } from "react-router";
+
+export default function PeopleTable({ users = [] }: { users?: any[] }) {
   const [userId, setUserId] = useState<string>("");
-
-  useEffect(() => {
-    async function fetchEnrollments() {
-      try {
-        const response = await coursesClient.findEnrollmentsForCourse(
-          cid as string
-        );
-        setEnrollments(response || []);
-      } catch (error) {
-        console.error("Error fetching enrollments:", error);
-        setEnrollments([]);
-      }
-    }
-
-    fetchEnrollments();
-  }, [cid]);
-  async function handleAddUser() {
-    try {
-      await coursesClient.addUserToCourse(cid as string, userId);
-      const updatedEnrollments = await coursesClient.findEnrollmentsForCourse(
-        cid as string
-      );
-      setEnrollments(updatedEnrollments || []);
-      setUserId("");
-      alert("User added successfully!");
-    } catch (error) {
-      console.error("Error adding user to course:", error);
-      alert("Failed to add user. Please try again.");
-    }
-  }
   return (
     <div id="wd-people-table">
+      <PeopleDetails />
       <ProtectedFaculty studentAccess={<></>}>
         <div className="d-flex mb-3">
           <Form.Control
@@ -49,7 +19,8 @@ export default function PeopleTable() {
             onChange={(e) => setUserId(e.target.value)}
             className="me-2"
           />
-          <Button variant="primary" onClick={handleAddUser}>
+          <Button variant="primary">
+            {/* onClick={handleAddUser} */}
             Add User
           </Button>
         </div>
@@ -66,12 +37,17 @@ export default function PeopleTable() {
           </tr>
         </thead>
         <tbody>
-          {enrollments.map((user: any) => (
+          {users.map((user: any) => (
             <tr key={user._id}>
               <td className="wd-full-name text-nowrap">
-                <FaUserCircle className="me-2 fs-1 text-secondary" />
-                <span className="wd-first-name">{user.firstName}</span>{" "}
-                <span className="wd-last-name">{user.lastName}</span>
+                <Link
+                  to={`/Kambaz/Account/Users/${user._id}`}
+                  className="text-decoration-none"
+                >
+                  <FaUserCircle className="me-2 fs-1 text-secondary" />
+                  <span className="wd-first-name">{user.firstName}</span>{" "}
+                  <span className="wd-last-name">{user.lastName}</span>
+                </Link>
               </td>
               <td className="wd-login-id">{user.loginId}</td>
               <td className="wd-section">{user.section}</td>

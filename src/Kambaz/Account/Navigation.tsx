@@ -4,8 +4,11 @@ export default function AccountNavigation() {
   const { pathname } = useLocation();
   const isSignin = pathname.includes("Signin");
   const isSignup = pathname.includes("Signup");
+  const isProfile = pathname.includes("Profile");
+  const isUsers = pathname.includes("Users");
+
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  // const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
+
   return (
     <div id="wd-account-navigation" className="wd list-group fs-5 rounded-0">
       {!currentUser ? (
@@ -33,9 +36,22 @@ export default function AccountNavigation() {
         <Link
           to="/Kambaz/Account/Profile"
           id="wd-account-profile-link"
-          className="list-group-item text-black active border border-0"
+          className={`list-group-item border border-0 ${
+            isProfile ? "active text-black" : "text-danger"
+          }`}
         >
           Profile
+        </Link>
+      )}
+      {currentUser && currentUser.role === "ADMIN" && (
+        <Link
+          to="/Kambaz/Account/Users"
+          className={`list-group-item border border-0 ${
+            isUsers ? "active text-black" : "text-danger"
+          }`}
+        >
+          {" "}
+          Users{" "}
         </Link>
       )}
     </div>

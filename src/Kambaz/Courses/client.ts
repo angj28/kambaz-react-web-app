@@ -7,10 +7,6 @@ export const fetchAllCourses = async () => {
   const { data } = await axiosWithCredentials.get(`${COURSES_API}`);
   return data;
 };
-export const fetchAllCoursesForCurrentUser = async () => {
-  const { data } = await axiosWithCredentials.get("/api/users/current/courses");
-  return data;
-};
 export const fetchAllEnrollments = async () => {
   const { data } = await axiosWithCredentials.get(`${ENROLLMENTS_API}`);
   return data;

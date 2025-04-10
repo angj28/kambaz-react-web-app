@@ -4,14 +4,33 @@ import * as assignmentsDao from "../Assignments/dao.js";
 import * as enrollmentsDao from "../Enrollments/dao.js";
 
 export default function CourseRoutes(app) {
+  const findCoursesForUser = async (req, res) => {
+    const currentUser = req.session["currentUser"];
+    if (!currentUser) {
+      res.sendStatus(401);
+      return;
+    }
+    if (currentUser.role === "ADMIN") {
+      const courses = await courseDao.findAllCourses();
+      res.json(courses);
+      return;
+    }
+    let { uid } = req.params;
+    if (uid === "current") {
+      uid = currentUser._id;
+    }
+    const courses = await enrollmentsDao.findCoursesForUser(uid);
+    res.json(courses);
+  };
+  app.get("/api/users/:uid/courses", findCoursesForUser);
   app.get("/api/courses/:courseId/modules", (req, res) => {
     const { courseId } = req.params;
     const modules = modulesDao.findModulesForCourse(courseId);
     res.json(modules);
   });
 
-  app.get("/api/courses", (req, res) => {
-    const courses = dao.findAllCourses();
+  app.get("/api/courses", async (req, res) => {
+    const courses = await dao.findAllCourses();
     res.send(courses);
   });
   app.delete("/api/courses/:courseId", (req, res) => {
@@ -48,9 +67,11 @@ export default function CourseRoutes(app) {
     const newAssignment = assignmentsDao.createAssignment(assignment);
     res.send(newAssignment);
   });
-  app.get("/api/courses/:courseId/enrollments", (req, res) => {
+  app.get("/api/courses/:courseId/enrollments", async (req, res) => {
     const { courseId } = req.params;
-    const enrollments = enrollmentsDao.findUsersEnrolledInCourse(courseId);
+    const enrollments = await enrollmentsDao.findUsersEnrolledInCourse(
+      courseId
+    );
     res.json(enrollments);
   });
   app.post("/api/courses/:courseId/enrollments/:userId", (req, res) => {
@@ -72,10 +93,6 @@ export default function CourseRoutes(app) {
   );
   app.get("/api/enrollments", (req, res) => {
     const courses = enrollmentsDao.findAllEnrollments();
-    res.send(courses);
-  });
-  app.get("/api/users/current/courses", (req, res) => {
-    const courses = dao.findCoursesForEnrolledUser();
     res.send(courses);
   });
 }

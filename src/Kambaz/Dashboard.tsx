@@ -25,16 +25,17 @@ export default function Dashboard({
 }) {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const [allCourses, setAllCourses] = useState<any[]>([]);
+  const [currentCourses, setCurrentCourses] = useState<any[]>([]);
   const [showAllCourses, setShowAllCourses] = useState(false);
 
   const fetchCourses = async () => {
     try {
-      const allCourses = await coursesClient.fetchAllCourses();
-      console.log("Fetched Courses:", allCourses);
+      const currentUsersCourses = await userClient.findCoursesForUser(
+        currentUser._id
+      );
+      console.log("Fetched Courses:", currentUsersCourses);
       console.log("Courses:", courses);
-      setAllCourses(allCourses);
-      courses = await userClient.findMyCourses();
+      setCurrentCourses(currentUsersCourses);
     } catch (error) {
       console.error("Error fetching courses:", error);
     }
@@ -47,7 +48,6 @@ export default function Dashboard({
       );
       setEnrollments(updatedEnrollments || []);
       window.location.reload();
-      // alert("User added successfully!");
     } catch (error) {
       console.error("Error adding user to course:", error);
       alert("Failed to add user. Please try again.");
@@ -56,9 +56,9 @@ export default function Dashboard({
   const handleDeleteUser = async (courseId: string) => {
     try {
       await coursesClient.deleteUserFromCourse(courseId, currentUser._id);
-      courses = await userClient.findMyCourses();
+      const myCourses = await userClient.findCoursesForUser(currentUser._id);
+      setCurrentCourses(myCourses);
       window.location.reload();
-      // alert("User unenrolled successfully!");
     } catch (error) {
       console.error("Error deleting user from course:", error);
       alert("Failed to delete user. Please try again.");
@@ -116,12 +116,12 @@ export default function Dashboard({
         <hr />
       </ProtectedFaculty>
       <h2 id="wd-dashboard-published">
-        Published Courses ({(showAllCourses ? allCourses : courses).length})
+        Published Courses ({(showAllCourses ? courses : currentCourses).length})
       </h2>
       <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {(showAllCourses ? allCourses : courses).map(
+          {(showAllCourses ? courses : currentCourses).map(
             (course: any, index: any) => (
               <Col
                 className="wd-dashboard-course"

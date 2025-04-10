@@ -23,13 +23,19 @@ export const deleteUser = async (userId: string) => {
   const response = await axiosWithCredentials.delete(`${USERS_API}/${userId}`);
   return response.data;
 };
-
-export const findMyCourses = async () => {
-  const { data } = await axiosWithCredentials.get(
-    `${USERS_API}/current/courses`
+export const findCoursesForUser = async (userId: string) => {
+  const response = await axiosWithCredentials.get(
+    `${USERS_API}/${userId}/courses`
   );
-  return data;
+  return response.data;
 };
+
+// export const findMyCourses = async (userId: string) => {
+//   const { data } = await axiosWithCredentials.get(
+//     `${USERS_API}/${userId}/courses`
+//   );
+//   return data;
+// };
 export const signin = async (credentials: any) => {
   const response = await axiosWithCredentials.post(
     `${USERS_API}/signin`,

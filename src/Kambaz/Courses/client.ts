@@ -85,3 +85,7 @@ export async function deleteUserFromCourse(courseId: string, userId: string) {
     throw error;
   }
 }
+export const createCourse = async (course: any) => {
+  const { data } = await axiosWithCredentials.post(COURSES_API, course);
+  return data;
+};

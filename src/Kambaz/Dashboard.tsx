@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import ProtectedFaculty from "./ProtectedFaculty";
 import { useEffect, useState } from "react";
 import ProtectedStudent from "./ProtectedStudent";
-import { setEnrollments } from "./Courses/reducer";
-import * as coursesClient from "./Courses/client";
+// import { setEnrollments } from "./Courses/reducer";
+// import * as coursesClient from "./Courses/client";
 import * as userClient from "./Account/client";
 
 export default function Dashboard({
@@ -15,6 +15,9 @@ export default function Dashboard({
   addNewCourse,
   deleteCourse,
   updateCourse,
+  enrolling,
+  setEnrolling,
+  updateEnrollment,
 }: {
   courses: any;
   course: any;
@@ -22,11 +25,13 @@ export default function Dashboard({
   addNewCourse: () => void;
   deleteCourse: (course: any) => void;
   updateCourse: () => void;
+  enrolling: boolean;
+  setEnrolling: (enrolling: boolean) => void;
+  updateEnrollment: (courseId: string, enrolled: boolean) => void;
 }) {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [currentCourses, setCurrentCourses] = useState<any[]>([]);
-  const [showAllCourses, setShowAllCourses] = useState(false);
 
   const fetchCourses = async () => {
     try {
@@ -40,30 +45,30 @@ export default function Dashboard({
       console.error("Error fetching courses:", error);
     }
   };
-  const handleAddUser = async (courseId: string) => {
-    try {
-      await coursesClient.addUserToCourse(courseId, currentUser._id);
-      const updatedEnrollments = await coursesClient.findEnrollmentsForCourse(
-        courseId
-      );
-      setEnrollments(updatedEnrollments || []);
-      window.location.reload();
-    } catch (error) {
-      console.error("Error adding user to course:", error);
-      alert("Failed to add user. Please try again.");
-    }
-  };
-  const handleDeleteUser = async (courseId: string) => {
-    try {
-      await coursesClient.deleteUserFromCourse(courseId, currentUser._id);
-      const myCourses = await userClient.findCoursesForUser(currentUser._id);
-      setCurrentCourses(myCourses);
-      window.location.reload();
-    } catch (error) {
-      console.error("Error deleting user from course:", error);
-      alert("Failed to delete user. Please try again.");
-    }
-  };
+  // const handleAddUser = async (courseId: string) => {
+  //   try {
+  //     await coursesClient.addUserToCourse(courseId, currentUser._id);
+  //     const updatedEnrollments = await coursesClient.findEnrollmentsForCourse(
+  //       courseId
+  //     );
+  //     setEnrollments(updatedEnrollments || []);
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.error("Error adding user to course:", error);
+  //     alert("Failed to add user. Please try again.");
+  //   }
+  // };
+  // const handleDeleteUser = async (courseId: string) => {
+  //   try {
+  //     await coursesClient.deleteUserFromCourse(courseId, currentUser._id);
+  //     const myCourses = await userClient.findCoursesForUser(currentUser._id);
+  //     setCurrentCourses(myCourses);
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.error("Error deleting user from course:", error);
+  //     alert("Failed to delete user. Please try again.");
+  //   }
+  // };
 
   useEffect(() => {
     fetchCourses();
@@ -75,10 +80,10 @@ export default function Dashboard({
         <h1 id="wd-dashboard-title">Dashboard</h1>
         <ProtectedStudent facultyAccess={<></>}>
           <button
-            className="btn btn-primary float-end"
-            onClick={() => setShowAllCourses(!showAllCourses)}
+            onClick={() => setEnrolling(!enrolling)}
+            className="float-end btn btn-primary"
           >
-            Enrollments
+            {enrolling ? "My Courses" : "All Courses"}
           </button>
         </ProtectedStudent>
       </div>
@@ -116,12 +121,12 @@ export default function Dashboard({
         <hr />
       </ProtectedFaculty>
       <h2 id="wd-dashboard-published">
-        Published Courses ({(showAllCourses ? courses : currentCourses).length})
+        Published Courses ({(enrolling ? courses : currentCourses).length})
       </h2>
       <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {(showAllCourses ? courses : currentCourses).map(
+          {(enrolling ? courses : currentCourses).map(
             (course: any, index: any) => (
               <Col
                 className="wd-dashboard-course"
@@ -176,7 +181,7 @@ export default function Dashboard({
                       </button>
                     </ProtectedFaculty>
                     <ProtectedStudent facultyAccess={<></>}>
-                      {courses.some(
+                      {currentCourses.some(
                         (enrolledCourse: any) =>
                           enrolledCourse._id === course._id
                       ) ? (
@@ -190,7 +195,10 @@ export default function Dashboard({
                             Go
                           </Button>
                           <button
-                            onClick={() => handleDeleteUser(course._id)}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              updateEnrollment(course._id, false);
+                            }}
                             className="btn btn-danger float-end"
                           >
                             Unenroll
@@ -207,8 +215,10 @@ export default function Dashboard({
                             Go
                           </Button>
                           <button
-                            onClick={() => {
-                              handleAddUser(course._id);
+                            onClick={(event) => {
+                              event.preventDefault();
+                              updateEnrollment(course._id, true);
+                              fetchCourses();
                             }}
                             className="btn btn-success float-end"
                           >

@@ -93,6 +93,22 @@ export default function TOC() {
           Assignment 5 Server
         </Nav.Link>
       </Nav.Item>
+      <Nav.Item>
+        <Nav.Link
+          id="wd-github"
+          href="https://github.com/angj28/kambaz-node-server-app/tree/a6"
+        >
+          Assignment 6 Node Github
+        </Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link
+          id="wd-github"
+          href="https://kambaz-node-server-app-a6-u9u6.onrender.com"
+        >
+          Assignment 5 Server
+        </Nav.Link>
+      </Nav.Item>
     </Nav>
   );
 }

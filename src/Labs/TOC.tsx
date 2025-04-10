@@ -106,7 +106,7 @@ export default function TOC() {
           id="wd-github"
           href="https://kambaz-node-server-app-a6-u9u6.onrender.com"
         >
-          Assignment 5 Server
+          Assignment 6 Server
         </Nav.Link>
       </Nav.Item>
     </Nav>

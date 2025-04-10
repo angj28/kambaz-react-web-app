@@ -74,4 +74,8 @@ export default function CourseRoutes(app) {
     const courses = enrollmentsDao.findAllEnrollments();
     res.send(courses);
   });
+  app.get("/api/users/current/courses", (req, res) => {
+    const courses = dao.findCoursesForEnrolledUser();
+    res.send(courses);
+  });
 }

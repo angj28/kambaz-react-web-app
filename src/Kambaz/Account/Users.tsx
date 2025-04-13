@@ -12,13 +12,12 @@ export default function Users() {
     const user = await client.createUser({
       firstName: "New",
       lastName: `User${users.length + 1}`,
-      username: `newuser${Date.now()}`,
+      username: `newuser${Date.now()}${Math.floor(Math.random() * 1000)}`,
       password: "password123",
       email: `email${users.length + 1}@neu.edu`,
       section: "S101",
       role: "STUDENT",
     });
-    await client.createUser(user);
     setUsers([...users, user]);
   };
 

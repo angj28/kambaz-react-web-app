@@ -18,7 +18,11 @@ export default function Kambaz() {
   const [enrolling, setEnrolling] = useState<boolean>(false);
   const findCoursesForUser = async () => {
     try {
-      const courses = await userClient.findCoursesForUser(currentUser._id);
+      if (!currentUser) {
+        console.log("User not logged in or user data not loaded yet");
+        return;
+      }
+      const courses = await userClient.findMyCourses();
       setCourses(courses);
     } catch (error) {
       console.error(error);
@@ -43,6 +47,11 @@ export default function Kambaz() {
 
   const fetchCourses = async () => {
     try {
+      if (!currentUser) {
+        console.log("User not logged in or user data not loaded yet");
+        return;
+      }
+
       const allCourses = await courseClient.fetchAllCourses();
       const enrolledCourses = await userClient.findCoursesForUser(
         currentUser._id
@@ -71,14 +80,6 @@ export default function Kambaz() {
       description: "New Description",
     },
   ]);
-  // const fetchCourses = async () => {
-  //   try {
-  //     const courses = await courseClient.fetchAllCourses();
-  //     setCourses(courses);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
   useEffect(() => {
     if (enrolling) {
       fetchCourses();
@@ -94,6 +95,7 @@ export default function Kambaz() {
   const deleteThisCourse = async (courseId: string) => {
     const status = await courseClient.deleteCourse(courseId);
     setCourses(courses.filter((course) => course._id !== courseId));
+    updateEnrollment(courseId, false);
     console.log(status);
   };
   const updateThisCourse = async () => {

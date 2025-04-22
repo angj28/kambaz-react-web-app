@@ -45,30 +45,6 @@ export default function Dashboard({
       console.error("Error fetching courses:", error);
     }
   };
-  // const handleAddUser = async (courseId: string) => {
-  //   try {
-  //     await coursesClient.addUserToCourse(courseId, currentUser._id);
-  //     const updatedEnrollments = await coursesClient.findEnrollmentsForCourse(
-  //       courseId
-  //     );
-  //     setEnrollments(updatedEnrollments || []);
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error("Error adding user to course:", error);
-  //     alert("Failed to add user. Please try again.");
-  //   }
-  // };
-  // const handleDeleteUser = async (courseId: string) => {
-  //   try {
-  //     await coursesClient.deleteUserFromCourse(courseId, currentUser._id);
-  //     const myCourses = await userClient.findCoursesForUser(currentUser._id);
-  //     setCurrentCourses(myCourses);
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error("Error deleting user from course:", error);
-  //     alert("Failed to delete user. Please try again.");
-  //   }
-  // };
 
   useEffect(() => {
     fetchCourses();
@@ -127,110 +103,111 @@ export default function Dashboard({
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
           {(enrolling ? courses : currentCourses).map(
-            (course: any, index: any) => (
-              <Col
-                className="wd-dashboard-course"
-                style={{ width: "300px" }}
-                key={course._id}
-              >
-                <Card>
-                  <Card.Img
-                    src={`/images/cat${(index % 8) + 1}.jpg`}
-                    variant="top"
-                    width="100%"
-                    height={160}
-                  />
-                  <Card.Body className="card-body">
-                    <Card.Title className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                      {course.name}{" "}
-                    </Card.Title>
-                    <Card.Text
-                      className="wd-dashboard-course-description overflow-hidden"
-                      style={{ height: "100px" }}
-                    >
-                      {course.description}{" "}
-                    </Card.Text>
-                    <ProtectedFaculty studentAccess={<></>}>
-                      <Button
-                        onClick={() =>
-                          navigate(`/Kambaz/Courses/${course._id}/Home`)
-                        }
-                        variant="primary"
+            (course: any, index: any) =>
+              course ? (
+                <Col
+                  className="wd-dashboard-course"
+                  style={{ width: "300px" }}
+                  key={course._id}
+                >
+                  <Card>
+                    <Card.Img
+                      src={`/images/cat${(index % 8) + 1}.jpg`}
+                      variant="top"
+                      width="100%"
+                      height={160}
+                    />
+                    <Card.Body className="card-body">
+                      <Card.Title className="wd-dashboard-course-title text-nowrap overflow-hidden">
+                        {course.name}{" "}
+                      </Card.Title>
+                      <Card.Text
+                        className="wd-dashboard-course-description overflow-hidden"
+                        style={{ height: "100px" }}
                       >
-                        Go
-                      </Button>
-                      <button
-                        onClick={(event) => {
-                          event.preventDefault();
-                          deleteCourse(course._id);
-                        }}
-                        className="btn btn-danger float-end"
-                        id="wd-delete-course-click"
-                      >
-                        Delete
-                      </button>
-                      <button
-                        id="wd-edit-course-click"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setCourse(course);
-                        }}
-                        className="btn btn-warning me-2 float-end"
-                      >
-                        Edit
-                      </button>
-                    </ProtectedFaculty>
-                    <ProtectedStudent facultyAccess={<></>}>
-                      {currentCourses.some(
-                        (enrolledCourse: any) =>
-                          enrolledCourse._id === course._id
-                      ) ? (
-                        <div>
-                          <Button
-                            onClick={() =>
-                              navigate(`/Kambaz/Courses/${course._id}/Home`)
-                            }
-                            variant="primary"
-                          >
-                            Go
-                          </Button>
-                          <button
-                            onClick={(event) => {
-                              event.preventDefault();
-                              updateEnrollment(course._id, false);
-                            }}
-                            className="btn btn-danger float-end"
-                          >
-                            Unenroll
-                          </button>
-                        </div>
-                      ) : (
-                        <div>
-                          <Button
-                            onClick={() =>
-                              navigate(`/Kambaz/Courses/${course._id}/Home`)
-                            }
-                            variant="primary"
-                          >
-                            Go
-                          </Button>
-                          <button
-                            onClick={(event) => {
-                              event.preventDefault();
-                              updateEnrollment(course._id, true);
-                              fetchCourses();
-                            }}
-                            className="btn btn-success float-end"
-                          >
-                            Enroll
-                          </button>
-                        </div>
-                      )}
-                    </ProtectedStudent>
-                  </Card.Body>
-                </Card>
-              </Col>
-            )
+                        {course.description}{" "}
+                      </Card.Text>
+                      <ProtectedFaculty studentAccess={<></>}>
+                        <Button
+                          onClick={() =>
+                            navigate(`/Kambaz/Courses/${course._id}/Home`)
+                          }
+                          variant="primary"
+                        >
+                          Go
+                        </Button>
+                        <button
+                          onClick={(event) => {
+                            event.preventDefault();
+                            deleteCourse(course._id);
+                          }}
+                          className="btn btn-danger float-end"
+                          id="wd-delete-course-click"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          id="wd-edit-course-click"
+                          onClick={(event) => {
+                            event.preventDefault();
+                            setCourse(course);
+                          }}
+                          className="btn btn-warning me-2 float-end"
+                        >
+                          Edit
+                        </button>
+                      </ProtectedFaculty>
+                      <ProtectedStudent facultyAccess={<></>}>
+                        {currentCourses.some(
+                          (enrolledCourse: any) =>
+                            enrolledCourse._id === course._id
+                        ) ? (
+                          <div>
+                            <Button
+                              onClick={() =>
+                                navigate(`/Kambaz/Courses/${course._id}/Home`)
+                              }
+                              variant="primary"
+                            >
+                              Go
+                            </Button>
+                            <button
+                              onClick={(event) => {
+                                event.preventDefault();
+                                updateEnrollment(course._id, false);
+                              }}
+                              className="btn btn-danger float-end"
+                            >
+                              Unenroll
+                            </button>
+                          </div>
+                        ) : (
+                          <div>
+                            <Button
+                              onClick={() =>
+                                navigate(`/Kambaz/Courses/${course._id}/Home`)
+                              }
+                              variant="primary"
+                            >
+                              Go
+                            </Button>
+                            <button
+                              onClick={(event) => {
+                                event.preventDefault();
+                                updateEnrollment(course._id, true);
+                                fetchCourses();
+                              }}
+                              className="btn btn-success float-end"
+                            >
+                              Enroll
+                            </button>
+                          </div>
+                        )}
+                      </ProtectedStudent>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ) : null // Skip rendering if course is null
           )}
         </Row>
       </div>
